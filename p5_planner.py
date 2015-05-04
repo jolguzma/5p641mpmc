@@ -10,6 +10,7 @@ with open("Crafting.json") as f:
 #print Crafting['Goal']
 Items = Crafting['Items']
 check = None
+counter = 0
 def make_checker(rule):
 	def check(state):
 		checker = True
@@ -55,13 +56,25 @@ def is_goal(state):
 	mygoal = inventory_to_tuple(goal)
 	for i in xrange(len(state)):
 		if mygoal[i] != 0:
-			if state[i] >= mygoal[i]:
-				return True
-			else:
+			if state[i] < mygoal[i]:
 				return False
+	return True
 
-def heuristic(state):
-	return 0
+def heuristic(state, nextState):
+	#print 'state:'
+	#print state
+	#print 'prev:'
+	#print prevState
+	counter = 0
+	for i in xrange(len(state)):
+		if state[i] > nextState[i]:
+			counter += 5
+		if nextState[i] > state[i]:
+			counter -= 10 
+		if nextState[i]>= 6:
+			counter += 10
+	#print counter
+	return counter
 
 def inventory_to_tuple(d):
 	inventory = tuple(int(d.get(name,0)) for i,name in enumerate(Items))
@@ -89,37 +102,40 @@ def search(graph, initial, is_goal, limit, heuristic):
 
 	queue = []
 	new_cost = 0.0
+	priortiy  = 0.0
 	state = inventory_to_tuple(initial)
 	steps[state] = 'start_state'
 	cost_so_far[state] = 0.0
 	prev[state] = None
-	heappush(queue,(0, state))
+	heappush(queue,(0,0, state))
 	goalQueue = []
 
 	#discState = heappop(queue)
 	#print discState
 	while queue:
 		discState = heappop(queue)
-		if is_goal(discState[1]):
+		if is_goal(discState[2]):
 			#heappush(goalQueue,(discState[0], discState[1]))
-			print ('here')
+			#print ('here')
 			break
-		for i in graph(discState[1]):
+		for i in graph(discState[2]):
 			#print i
-			new_cost = cost_so_far[discState[1]] + i[2]
+			new_cost = cost_so_far[discState[2]] + i[2]
 			if i[1] not in cost_so_far or new_cost < cost_so_far[i[1]]:
 				cost_so_far[i[1]] = new_cost
 				total_cost = new_cost
-				heappush(queue,(total_cost, i[1]))
-				prev[i[1]] = discState[1]
+				priority = new_cost + heuristic(discState[2], i[1])
+				prev[i[1]] = discState[2]
 				steps[i[1]] = i[0]
-	node = discState[1]
+				print priority
+				heappush(queue,(priority,total_cost, i[1]))
+	node = discState[2]
 	while node != None:
 		goalQueue.append(steps[node])
 		node = prev[node]
 	#goalQueue.append(initial)
 	goalQueue.reverse()
-	return discState[0], goalQueue
+	return discState[1], goalQueue
 
 print search(graph, initial, is_goal, limit, heuristic)
 
