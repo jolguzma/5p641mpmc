@@ -1,17 +1,17 @@
-    0"bench",1
+    0"bench",1 8
     1"cart", 1 or last one
-    2"coal", 1
-    3"cobble", 8
+    2"coal", 1,8
+    3"cobble", 8, 1
     4"furnace", 1
-    5"ingot", 6
+    5"ingot", 6, 17
     6"iron_axe", 
     7"iron_pickaxe", 
-    8"ore", 1
-    9"plank", 4
+    8"ore", 1     8      1
+    9"plank", 6,4 
     10"rail", 8
-    11"stick", 8
+    11"stick", 8          2              4
     12"stone_axe", 1
     13"stone_pickaxe", 1
-    14"wood", 5
+    14"wood", 1, 8
     15"wooden_axe", 1
     16"wooden_pickaxe"1
