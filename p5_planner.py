@@ -7,7 +7,7 @@ with open("Crafting.json") as f:
 	Crafting = json.load(f)
 #print Crafting['Items']
 #print Crafting['Initial']
-#print Crafting['Goal']
+
 Items = Crafting['Items']
 check = None
 counter = 0
@@ -73,7 +73,7 @@ def heuristic(state, nextState):
 			good = True
 		if nextState[i] > limit:
 			counter += float('inf')
-	if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 4 or nextState[11] > 2 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1  or nextState[15] > 1  or nextState[16] > 1 :
+	if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 8 or nextState[11] > 8 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
 		counter += float('inf')
 	if good == False:
 		counter += 1
@@ -131,15 +131,27 @@ def search(graph, initial, is_goal, limit, heuristic):
 				priority = new_cost + heuristic(discState[2], i[1])
 				prev[i[1]] = discState[2]
 				steps[i[1]] = i[0]
-				print priority
+				#print priority
 				heappush(queue,(priority,total_cost, i[1]))
 	node = discState[2]
+	counter = 0
 	while node != None:
+		counter += 1
 		goalQueue.append(steps[node])
 		node = prev[node]
 	#goalQueue.append(initial)
 	goalQueue.reverse()
-	return discState[1], goalQueue
+	return discState[1], goalQueue, counter-1
 
-print search(graph, initial, is_goal, limit, heuristic)
+#print search(graph, initial, is_goal, limit, heuristic)
+
+cost,path,leng = search(graph, initial, is_goal, limit, heuristic)
+print 'Achieve' + str(Crafting['Goal'])
+print ('cost=' + str(cost) + ', len=' +str(leng))
+print 'path: '
+print path
+
+
+
+
 
