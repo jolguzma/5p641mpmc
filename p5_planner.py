@@ -1,7 +1,7 @@
 import json
 from heapq import heappush, heappop
 from collections import namedtuple
-limit = 20
+limit = 32
 
 with open("Crafting.json") as f:
 	Crafting = json.load(f)
@@ -65,14 +65,18 @@ def heuristic(state, nextState):
 	#print state
 	#print 'prev:'
 	#print prevState
+	good = False
 	counter = 0
 	for i in xrange(len(state)):
-		if state[i] > nextState[i]:
-			counter += 5
-		if nextState[i] > state[i]:
-			counter -= 10 
-		if nextState[i]>= 6:
-			counter += 10
+		if state[i] == 0 and nextState[i] > 0:
+			#if state[i] < nextState[i]:
+			good = True
+		if nextState[i] > limit:
+			counter += float('inf')
+	if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 4 or nextState[11] > 2 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1  or nextState[15] > 1  or nextState[16] > 1 :
+		counter += float('inf')
+	if good == False:
+		counter += 1
 	#print counter
 	return counter
 
