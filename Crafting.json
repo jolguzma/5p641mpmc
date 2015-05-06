@@ -1,9 +1,9 @@
 {
   "Initial": {
+    "plank":3
     }, 
   "Goal": {
-    "cart": 1
-    ,"rail": 20
+    "plank":1
   },
   "Items": [
     "bench", 

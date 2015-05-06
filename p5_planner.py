@@ -5,6 +5,8 @@ limit = 32
 
 with open("Crafting.json") as f:
 	Crafting = json.load(f)
+#with open("Plutonium.json") as f:
+	#Crafting = json.load(f)
 #print Crafting['Items']
 #print Crafting['Initial']
 
@@ -63,18 +65,46 @@ def is_goal(state):
 def heuristic(state, nextState):
 	#print 'state:'
 	#print state
-	#print 'prev:'
-	#print prevState
+	#print 'nextState:'
+	#print nextState
 	good = False
 	counter = 0
+	
 	for i in xrange(len(state)):
 		if state[i] == 0 and nextState[i] > 0:
-			#if state[i] < nextState[i]:
+		#if state[i] < nextState[i]:
 			good = True
-		if nextState[i] > limit:
-			counter += float('inf')
-	if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 4 or nextState[11] > 4 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
+		#	counter -= 2
+	#	if nextState[i] > limit:
+			#print 'here'
+	#		counter += float('inf')
+	#if nextState[11] < state[11]:
+	#	counter += 1
+	#if nextState[5] < state[5]:
+	#	counter += 1
+	#if nextState[1] < state[1]:
+	#	counter += 1
+	#if nextState[10] < state[10] :
+	#	counter += 20
+	#if nextState[9] < state[9]:
+	#	counter += 7
+	#if nextState[2] < state[2] :
+	#	counter += 1
+	#if nextState[8] < state[8]: 
+	#	counter += 1
+	if nextState[7] == 1:
+		counter -= 20
+	if nextState[16] == 1:
+		counter -= 100
+	if nextState[13] == 1:
+		counter -= 100
+	if nextState[3] > 0:
+		counter += 200
+
+	if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 6 or nextState[11] > 4 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
 		counter += float('inf')
+	#if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 14 or nextState[4] > 1 or nextState[5] > 17 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 12 or nextState[10] > 32 or nextState[11] > 13 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
+	#	counter += float('inf')
 	if good == False:
 		counter += 2
 	#print counter
