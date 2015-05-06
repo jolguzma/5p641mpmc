@@ -93,7 +93,7 @@ def backWard():
 	return goal
 
 backward_map = backWard()
-print backward_map
+#print backward_map
 
 
 def heuristic(backward_map, state, nextState):
@@ -120,10 +120,10 @@ def heuristic(backward_map, state, nextState):
 	if nextState[3] > 0:
 		counter += 200
 
-	#if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 6 or nextState[11] > 4 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
-	#	counter += float('inf')
-	if nextState[0] > backward_map[0] or nextState[1] > backward_map[1] or nextState[2] > backward_map[2] or nextState[3] > backward_map[3] or nextState[4] > backward_map[4] or nextState[5] > backward_map[5] or nextState[6] > backward_map[6] or nextState[7] > backward_map[7] or nextState[8] > backward_map[8] or nextState[9] > backward_map[9] or nextState[11] > backward_map[11] or nextState[12] > backward_map[12] or nextState[13] > backward_map[13]  or nextState[14] > backward_map[14] or nextState[15] > backward_map[15] or nextState[16] > backward_map[16] :
-		counter += float('inf')	
+	if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 6 or nextState[11] > 4 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
+		counter += float('inf')
+	#if nextState[0] > backward_map[0] or nextState[1] > backward_map[1] or nextState[2] > backward_map[2] or nextState[3] > backward_map[3] or nextState[4] > backward_map[4] or nextState[5] > backward_map[5] or nextState[6] > backward_map[6] or nextState[7] > backward_map[7] or nextState[8] > backward_map[8] or nextState[9] > backward_map[9] or nextState[11] > backward_map[11] or nextState[12] > backward_map[12] or nextState[13] > backward_map[13]  or nextState[14] > backward_map[14] or nextState[15] > backward_map[15] or nextState[16] > backward_map[16] :
+	#	counter += float('inf')	
 	return counter
 
 Recipe = namedtuple('Recipe',['name','check','effect','cost'])
