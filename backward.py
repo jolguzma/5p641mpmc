@@ -23,7 +23,7 @@ def backward():
 	j= 0
 	goal = inventory_to_tuple(Crafting['Goal'])
 	discRules = []
-	while j < 2:
+	while j < 3:
 		for name, rule in Crafting['Recipes'].items():
 			if name not in discRules:
 				produces = inventory_to_tuple(rule['Produces'])

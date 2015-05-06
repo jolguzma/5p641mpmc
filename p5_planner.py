@@ -71,7 +71,7 @@ def backWard():
 	j= 0
 	goal = inventory_to_tuple(Crafting['Goal'])
 	discRules = []
-	while j < 2:
+	while j < 4:
 		for name, rule in Crafting['Recipes'].items():
 			if name not in discRules:
 				produces = inventory_to_tuple(rule['Produces'])
@@ -93,6 +93,7 @@ def backWard():
 	return goal
 
 backward_map = backWard()
+print backward_map
 
 
 def heuristic(backward_map, state, nextState):
