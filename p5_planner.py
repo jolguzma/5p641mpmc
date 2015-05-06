@@ -13,6 +13,11 @@ with open("Crafting.json") as f:
 Items = Crafting['Items']
 check = None
 counter = 0
+
+def inventory_to_tuple(d):
+	inventory = tuple(int(d.get(name,0)) for i,name in enumerate(Items))
+	return inventory
+
 def make_checker(rule):
 	def check(state):
 		checker = True
@@ -62,8 +67,37 @@ def is_goal(state):
 				return False
 	return True
 
-def heuristic(state, nextState):
-	#print 'state:'
+def backWard():
+	j= 0
+	goal = inventory_to_tuple(Crafting['Goal'])
+	discRules = []
+	while j < 2:
+		for name, rule in Crafting['Recipes'].items():
+			if name not in discRules:
+				produces = inventory_to_tuple(rule['Produces'])
+				for i in xrange(len(goal)):
+					if goal[i]  >0 and produces[i] > 0:
+						#print name
+						discRules.append(name)
+						if rule.get('Requires')!= None:
+							requires = inventory_to_tuple(rule['Requires'])
+							for i in xrange(len(goal)):
+								if requires[i] > 0 and goal[i] == 0:
+									goal = tuple(goal[i]+requires[i] for i,amount in enumerate(goal))
+						if rule.get('Consumes')!= None:
+							consumes = inventory_to_tuple(rule['Consumes'])	
+							goal = tuple(goal[i]+consumes[i] for i,amount in enumerate(goal)) 
+
+		#print discRules
+		j +=1
+	return goal
+
+backward_map = backWard()
+
+
+def heuristic(backward_map, state, nextState):
+	#print backward_map
+	#print backward_map[1]
 	#print state
 	#print 'nextState:'
 	#print nextState
@@ -71,27 +105,11 @@ def heuristic(state, nextState):
 	counter = 0
 	
 	for i in xrange(len(state)):
-		if state[i] == 0 and nextState[i] > 0:
-		#if state[i] < nextState[i]:
+	#	if state[i] == 0 and nextState[i] > 0:
+		if state[i] < nextState[i]:
 			good = True
-		#	counter -= 2
-	#	if nextState[i] > limit:
-			#print 'here'
-	#		counter += float('inf')
-	#if nextState[11] < state[11]:
-	#	counter += 1
-	#if nextState[5] < state[5]:
-	#	counter += 1
-	#if nextState[1] < state[1]:
-	#	counter += 1
-	#if nextState[10] < state[10] :
-	#	counter += 20
-	#if nextState[9] < state[9]:
-	#	counter += 7
-	#if nextState[2] < state[2] :
-	#	counter += 1
-	#if nextState[8] < state[8]: 
-	#	counter += 1
+	if good == False:
+		counter += 2
 	if nextState[7] == 1:
 		counter -= 20
 	if nextState[16] == 1:
@@ -101,18 +119,11 @@ def heuristic(state, nextState):
 	if nextState[3] > 0:
 		counter += 200
 
-	if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 6 or nextState[11] > 4 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
-		counter += float('inf')
-	#if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 14 or nextState[4] > 1 or nextState[5] > 17 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 12 or nextState[10] > 32 or nextState[11] > 13 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
+	#if nextState[0] > 1 or nextState[1] > 1 or nextState[2] > 1 or nextState[3] > 8 or nextState[4] > 1 or nextState[5] > 6 or nextState[6] > 1 or nextState[7] > 1 or nextState[8] > 1 or nextState[9] > 6 or nextState[11] > 4 or nextState[12] > 1 or nextState[13] > 1  or nextState[14] > 1 or nextState[15] > 1  or nextState[16] > 1 :
 	#	counter += float('inf')
-	if good == False:
-		counter += 2
-	#print counter
+	if nextState[0] > backward_map[0] or nextState[1] > backward_map[1] or nextState[2] > backward_map[2] or nextState[3] > backward_map[3] or nextState[4] > backward_map[4] or nextState[5] > backward_map[5] or nextState[6] > backward_map[6] or nextState[7] > backward_map[7] or nextState[8] > backward_map[8] or nextState[9] > backward_map[9] or nextState[11] > backward_map[11] or nextState[12] > backward_map[12] or nextState[13] > backward_map[13]  or nextState[14] > backward_map[14] or nextState[15] > backward_map[15] or nextState[16] > backward_map[16] :
+		counter += float('inf')	
 	return counter
-
-def inventory_to_tuple(d):
-	inventory = tuple(int(d.get(name,0)) for i,name in enumerate(Items))
-	return inventory
 
 Recipe = namedtuple('Recipe',['name','check','effect','cost'])
 # print yes
@@ -158,7 +169,7 @@ def search(graph, initial, is_goal, limit, heuristic):
 			if i[1] not in cost_so_far or new_cost < cost_so_far[i[1]]:
 				cost_so_far[i[1]] = new_cost
 				total_cost = new_cost
-				priority = new_cost + heuristic(discState[2], i[1])
+				priority = new_cost + heuristic(backward_map, discState[2], i[1])
 				prev[i[1]] = discState[2]
 				steps[i[1]] = i[0]
 				#print priority
